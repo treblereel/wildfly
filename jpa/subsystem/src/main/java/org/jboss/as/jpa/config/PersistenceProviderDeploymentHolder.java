@@ -45,7 +45,9 @@ public class PersistenceProviderDeploymentHolder {
     private final List<PersistenceProviderAdaptor>  adapterList = Collections.synchronizedList(new ArrayList<PersistenceProviderAdaptor>());
 
     public PersistenceProviderDeploymentHolder(final List<PersistenceProvider> providerList, final List<PersistenceProviderAdaptor> adapterList) {
-        this.providerList.addAll(providerList);
+        synchronized (this.providerList) {
+            this.providerList.addAll(providerList);
+        }
         if (adapterList != null) {
             this.adapterList.addAll(adapterList);
         }

@@ -943,10 +943,12 @@ public class PersistenceUnitServiceHandler {
         List<PersistenceProvider> providerList = persistenceProviderDeploymentHolder != null ?
                 persistenceProviderDeploymentHolder.getProviders() : null;
         if (providerList != null) {
-            for (PersistenceProvider persistenceProvider : providerList) {
-                if (persistenceProvider.getClass().getName().equals(pu.getPersistenceProviderClassName())) {
-                    ROOT_LOGGER.tracef("deployment %s is using %s", deploymentUnit.getName(), pu.getPersistenceProviderClassName());
-                    return persistenceProvider;
+            synchronized (providerList) {
+                for (PersistenceProvider persistenceProvider : providerList) {
+                    if (persistenceProvider.getClass().getName().equals(pu.getPersistenceProviderClassName())) {
+                        ROOT_LOGGER.tracef("deployment %s is using %s", deploymentUnit.getName(), pu.getPersistenceProviderClassName());
+                        return persistenceProvider;
+                    }
                 }
             }
         }
